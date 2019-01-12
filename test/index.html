@@ -12,7 +12,7 @@
   const {default: augmentor, useEffect, useRef, useState} = window.augmentor;
   const {html} = lighterhtml.hook(useRef);
 
-  const Button = text => augmentor(() => {
+  const Button = () => augmentor(text => {
     useEffect(
       () => {
         console.log('connected');
@@ -27,11 +27,9 @@
     </button>`;
   });
 
-  const button = Button('hello');
+  const button = Button();
 
-  document.body.appendChild(button());
-  // alternatively:
-  // render(document.body, button);
+  document.body.appendChild(button('hello'));
 
   </script>
 </head>
