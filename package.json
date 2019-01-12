@@ -1,6 +1,6 @@
 {
   "name": "dom-augmentor",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "DOM oriented useEffect hooks for the augmentor",
   "main": "cjs/index.js",
   "module": "esm/index.js",
