@@ -2,7 +2,9 @@
   "name": "dom-augmentor",
   "version": "0.1.0",
   "description": "DOM oriented useEffect hooks for the augmentor",
-  "main": "index.js",
+  "main": "esm/index.js",
+  "module": "cjs/index.js",
+  "unpkg": "min.js",
   "scripts": {
     "build": "npm run rollup && npm run cjs && npm run min && npm run size",
     "cjs": "ascjs esm cjs",
