@@ -8,6 +8,7 @@
   "scripts": {
     "build": "npm run rollup && npm run cjs && npm run min && npm run size",
     "cjs": "ascjs esm cjs",
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
     "min": "echo '/*! (c) Andrea Giammarchi - ISC */' > min.js && uglifyjs index.js -c -m >> min.js",
     "rollup": "rollup --config rollup.config.js && drop-babel-typeof index.js",
     "size": "cat index.js | wc -c;cat min.js | wc -c;gzip -c9 min.js | wc -c",
