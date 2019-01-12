@@ -11,7 +11,7 @@
     "min": "echo '/*! (c) Andrea Giammarchi - ISC */' > min.js && uglifyjs index.js -c -m >> min.js",
     "rollup": "rollup --config rollup.config.js && drop-babel-typeof index.js",
     "size": "cat index.js | wc -c;cat min.js | wc -c;gzip -c9 min.js | wc -c",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "istanbul cover test/test.js"
   },
   "keywords": [
     "hooks",
@@ -24,15 +24,18 @@
   "dependencies": {
     "@ungap/custom-event": "^0.2.0",
     "@ungap/weakset": "^0.1.5",
-    "augmentor": "0.0.5",
+    "augmentor": "^0.1.1",
     "disconnected": "^0.1.6"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
     "ascjs": "^3.0.0",
+    "basichtml": "^0.21.0",
+    "coveralls": "^3.0.2",
     "drop-babel-typeof": "^1.0.1",
     "http-server": "^0.11.1",
+    "istanbul": "^0.4.5",
     "nightmare": "^3.0.1",
     "rollup": "^0.66.6",
     "rollup-plugin-babel": "^4.0.3",
