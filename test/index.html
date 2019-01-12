@@ -12,24 +12,24 @@
   const {default: augmentor, useEffect, useRef, useState} = window.augmentor;
   const {html} = lighterhtml.hook(useRef);
 
-  const Button = () => augmentor(text => {
-    useEffect(
-      () => {
-        console.log('connected');
-        return () => consle.log('disconnected');
-      },
-      []
-    );
-    const [i, increment] = useState(0);
-    return html`
-    <button onclick=${() => increment(i + 1)}>
-      ${text} ${i}
-    </button>`;
-  });
+const Button = () => augmentor(text => {
+  useEffect(
+    () => {
+      console.log('connected');
+      return () => console.log('disconnected');
+    },
+    []
+  );
+  const [i, increment] = useState(0);
+  return html`
+  <button onclick=${() => increment(i + 1)}>
+    ${text} ${i}
+  </button>`;
+});
 
-  const button = Button();
+const button = Button();
 
-  document.body.appendChild(button('hello'));
+document.body.appendChild(button('hello'));
 
   </script>
 </head>
