@@ -8,31 +8,31 @@ This is exactly the same as the [augmentor](https://github.com/WebReflection/aug
 
 Compatible with any function that returns a DOM node, or a fragment, or a hyperhtml like Wire instance.
 
-```js
-import augmentor, {useEffect, useRef} from 'dom-augmentor';
-import {render, hook} from 'lighterhtml';
+**[Live Demo](https://codepen.io/WebReflection/pen/maQXwq)**
 
+```js
+const {default: $, useEffect, useRef, useState} = augmentor;
+const {render, hook} = lighterhtml;
 const {html, svg} = hook(useRef);
 
-const Button = text => augmentor(() => {
+const Button = (text) => $(() => {
   useEffect(
     () => {
       console.log('connected');
-      return () => {
-        consle.log('disconnected');
-      };
+      return () => console.log('disconnected');
     },
-    // empty array to have callbacks invoked
-    // only when the node is connected live or disconnected
     []
   );
-  html`<button>${text}</button>`;
+  const [i, increment] = useState(0);
+  return html`
+  <button onclick=${() => increment(i + 1)}>
+    ${text} ${i}
+  </button>`;
 });
 
 const button = Button('hello');
 
-document.body.appendChild(button());
-// or alternatively
-// render(document.body, button);
-
+render(document.body, button);
+// alternatively
+// document.body.appendChild(button());
 ```
