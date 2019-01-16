@@ -1,6 +1,6 @@
 # dom-augmentor
 
-[![Build Status](https://travis-ci.com/WebReflection/dom-augmentor.svg?branch=master)](https://travis-ci.com/WebReflection/dom-augmentor) [![Coverage Status](https://coveralls.io/repos/github/WebReflection/dom-augmentor/badge.svg?branch=master)](https://coveralls.io/github/WebReflection/dom-augmentor?branch=master) ![WebReflection status](https://offline.report/status/webreflection.svg)
+[![Build Status](https://travis-ci.com/WebReflection/dom-augmentor.svg?branch=master)](https://travis-ci.com/WebReflection/dom-augmentor) [![Coverage Status](https://coveralls.io/repos/github/WebReflection/dom-augmentor/badge.svg?branch=master)](https://coveralls.io/github/WebReflection/dom-augmentor?branch=master) [![Greenkeeper badge](https://badges.greenkeeper.io/WebReflection/dom-augmentor.svg)](https://greenkeeper.io/) ![WebReflection status](https://offline.report/status/webreflection.svg)
 
 
 
