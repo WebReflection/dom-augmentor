@@ -116,7 +116,6 @@ var augmentor = (function (exports) {
     function $() {
       var prev = now;
       now = current;
-      var result;
 
       try {
         var _ = current._,
@@ -124,15 +123,13 @@ var augmentor = (function (exports) {
             after = current.after,
             external = current.external;
         each(before, current);
-        result = fn.apply(_.c = this, _.a = arguments);
+        var result = fn.apply(_.c = this, _.a = arguments);
         each(after, current);
         if (external.length) each(external.splice(0), result);
-      } catch (o_O) {
-        console.error(o_O);
+        return result;
+      } finally {
+        now = prev;
       }
-
-      now = prev;
-      return result;
     }
   });
 
@@ -269,7 +266,8 @@ var augmentor = (function (exports) {
             update = _stack$i2.update;
 
         if (update) {
-          if (raf) stack[i].t = request(fn);else stack[i].clean = fn();
+          stack[i].update = false;
+          if (raf) stack[i].t = request(fn);else fn();
         }
       }
     });
