@@ -2,6 +2,7 @@ import CustomEvent from '@ungap/custom-event';
 import WeakSet from '@ungap/weakset';
 
 import augmentor, {
+  createContext,
   useCallback,
   useContext,
   useEffect as effect,
@@ -58,6 +59,7 @@ const useEffect = (fn, inputs) => {
 export default augmentor;
 
 export {
+  createContext,
   useCallback,
   useContext,
   useEffect,

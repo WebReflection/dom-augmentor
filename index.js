@@ -360,6 +360,14 @@ var augmentor = (function (exports) {
   var all = new WeakMap();
   var id$6 = uid();
   setup.push(stacked(id$6));
+  var createContext = function createContext() {
+    var context = {
+      value: void 0,
+      provide: provide
+    };
+    all.set(context, []);
+    return context;
+  };
   var useContext = function useContext(context) {
     var _unstacked = unstacked(id$6),
         i = _unstacked.i,
@@ -374,6 +382,16 @@ var augmentor = (function (exports) {
 
     return stack[i].value;
   };
+
+  function provide(value) {
+    if (this.value !== value) {
+      this.value = value;
+
+      for (var arr = all.get(this), length = arr.length, i = 0; i < length; i++) {
+        arr[i]();
+      }
+    }
+  }
 
   /*! (c) Andrea Giammarchi */
   function disconnected(poly) {
@@ -543,6 +561,7 @@ var augmentor = (function (exports) {
   }
 
   exports.default = augmentor;
+  exports.createContext = createContext;
   exports.useCallback = callback;
   exports.useContext = useContext;
   exports.useEffect = useEffect$1;
