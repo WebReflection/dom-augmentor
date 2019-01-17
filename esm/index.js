@@ -3,6 +3,7 @@ import WeakSet from '@ungap/weakset';
 
 import augmentor, {
   useCallback,
+  useContext,
   useEffect as effect,
   useLayoutEffect,
   useMemo,
@@ -58,6 +59,7 @@ export default augmentor;
 
 export {
   useCallback,
+  useContext,
   useEffect,
   useLayoutEffect,
   useMemo,

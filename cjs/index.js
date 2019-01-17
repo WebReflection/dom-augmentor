@@ -5,6 +5,7 @@ const WeakSet = (m => m.__esModule ? /* istanbul ignore next */ m.default : /* i
 const augmentor = (m => m.__esModule ? /* istanbul ignore next */ m.default : /* istanbul ignore next */ m)(require('augmentor'));
 const {
   useCallback,
+  useContext,
   useEffect: effect,
   useLayoutEffect,
   useMemo,
@@ -59,6 +60,7 @@ const useEffect = (fn, inputs) => {
 Object.defineProperty(exports, '__esModule', {value: true}).default = augmentor;
 
 exports.useCallback = useCallback;
+exports.useContext = useContext;
 exports.useEffect = useEffect;
 exports.useLayoutEffect = useLayoutEffect;
 exports.useMemo = useMemo;
