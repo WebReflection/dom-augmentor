@@ -35,8 +35,8 @@ var augmentor = (function (exports) {
         return all.get(this).set(value, 1), this;
       };
 
-      proto.delete = function (value) {
-        return all.get(this).delete(value);
+      proto["delete"] = function (value) {
+        return all.get(this)["delete"](value);
       };
 
       proto.has = function (value) {
@@ -81,9 +81,9 @@ var augmentor = (function (exports) {
       });
     };
   };
-  var id$1 = 0;
+  var id = 0;
   var uid = function uid() {
-    return '_$' + id$1++;
+    return '_$' + id++;
   };
   var unstacked = function unstacked(id) {
     var _now = now,
@@ -172,7 +172,7 @@ var augmentor = (function (exports) {
     return value !== this[i];
   }
 
-  var id$2 = uid();
+  var id$1 = uid();
   var cancel, request;
 
   try {
@@ -194,7 +194,7 @@ var augmentor = (function (exports) {
       t: 0,
       update: check,
       fn: function fn() {
-        set$1(stack[i], info.cb());
+        set(stack[i], info.cb());
       }
     };
     return info;
@@ -202,7 +202,7 @@ var augmentor = (function (exports) {
 
   var effect = function effect(raf) {
     return function (cb, refs) {
-      var _unstacked = unstacked(id$2),
+      var _unstacked = unstacked(id$1),
           i = _unstacked.i,
           stack = _unstacked.stack,
           unknown = _unstacked.unknown;
@@ -237,7 +237,7 @@ var augmentor = (function (exports) {
     };
   };
 
-  var set$1 = function set(info, clean) {
+  var set = function set(info, clean) {
     info.t = 0;
     info.clean = clean;
   };
@@ -249,12 +249,12 @@ var augmentor = (function (exports) {
       stack: stack
     };
 
-    var drop = function drop(current$$1, clean, raf, t) {
+    var drop = function drop(current, clean, raf, t) {
       if (raf && t) cancel(t);else if (clean) clean();
-      set$1(current$$1, null);
+      set(current, null);
     };
 
-    runner[id$2] = state;
+    runner[id$1] = state;
     runner.before.push(function () {
       state.i = 0;
     });
@@ -291,10 +291,10 @@ var augmentor = (function (exports) {
   var useEffect = effect(true);
   var useLayoutEffect = effect(false);
 
-  var id$3 = uid();
-  setup.push(stacked(id$3));
+  var id$2 = uid();
+  setup.push(stacked(id$2));
   var ref = (function (value) {
-    var _unstacked = unstacked(id$3),
+    var _unstacked = unstacked(id$2),
         i = _unstacked.i,
         stack = _unstacked.stack,
         unknown = _unstacked.unknown;
@@ -310,10 +310,10 @@ var augmentor = (function (exports) {
     return stack[i];
   });
 
-  var id$4 = uid();
-  setup.push(stacked(id$4));
+  var id$3 = uid();
+  setup.push(stacked(id$3));
   var useMemo = (function (callback, refs) {
-    var _unstacked = unstacked(id$4),
+    var _unstacked = unstacked(id$3),
         i = _unstacked.i,
         stack = _unstacked.stack,
         unknown = _unstacked.unknown;
@@ -346,10 +346,10 @@ var augmentor = (function (exports) {
     }, inputs);
   });
 
-  var id$5 = uid();
-  setup.push(stacked(id$5));
+  var id$4 = uid();
+  setup.push(stacked(id$4));
   var useReducer = (function (reducer, value) {
-    var _unstacked = unstacked(id$5),
+    var _unstacked = unstacked(id$4),
         i = _unstacked.i,
         stack = _unstacked.stack,
         unknown = _unstacked.unknown,
@@ -375,8 +375,8 @@ var augmentor = (function (exports) {
   });
 
   var all = new WeakMap();
-  var id$6 = uid();
-  setup.push(stacked(id$6));
+  var id$5 = uid();
+  setup.push(stacked(id$5));
   var createContext = function createContext(value) {
     var context = {
       value: value,
@@ -386,7 +386,7 @@ var augmentor = (function (exports) {
     return context;
   };
   var useContext = function useContext(context) {
-    var _unstacked = unstacked(id$6),
+    var _unstacked = unstacked(id$5),
         i = _unstacked.i,
         stack = _unstacked.stack,
         unknown = _unstacked.unknown,
@@ -482,7 +482,7 @@ var augmentor = (function (exports) {
 
       function dispatchTarget(node, event, type, counter) {
         if (observer.has(node) && !dispatched[type].has(node)) {
-          dispatched[counter].delete(node);
+          dispatched[counter]["delete"](node);
           dispatched[type].add(node);
           node.dispatchEvent(event);
           /*
@@ -553,7 +553,7 @@ var augmentor = (function (exports) {
     }
   };
 
-  var useEffect$1 = function useEffect$$1(fn, inputs) {
+  var useEffect$1 = function useEffect$1(fn, inputs) {
     var args = [fn];
     if (inputs) // if the inputs is an empty array
       // observe the returned element for connect/disconnect events
@@ -577,8 +577,8 @@ var augmentor = (function (exports) {
     if (_) _();
   }
 
-  exports.default = augmentor;
   exports.createContext = createContext;
+  exports.default = augmentor;
   exports.useCallback = callback;
   exports.useContext = useContext;
   exports.useEffect = useEffect$1;
