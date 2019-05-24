@@ -26,7 +26,7 @@
     "@ungap/custom-event": "^0.2.0",
     "@ungap/weakset": "^0.1.5",
     "augmentor": "^0.2.6",
-    "disconnected": "^0.1.6"
+    "disconnected": "^0.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
