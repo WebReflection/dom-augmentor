@@ -1,6 +1,6 @@
 require('basichtml').init();
 const {
-  default: augmentor,
+  augmentor,
   useEffect,
   useRef,
   useState
@@ -15,7 +15,7 @@ const Button = () => augmentor(text => {
     []
   );
   const [i, increment] = useState(0);
-  const {current: button} = useRef(createButton);
+  const {current: button} = useRef(createButton());
   button.textContent = `${text} ${i}`;
   button.onclick = () => increment(i + 1);
   return button;
@@ -31,10 +31,7 @@ const Unknown = () => augmentor(text => {
   );
   const [i, increment] = useState(0);
   return {
-    nodeType: 0,
-    valueOf() {
-      return createButton();
-    }
+    valueOf: () => createButton()
   };
 });
 
@@ -97,7 +94,9 @@ const Thrower = () => augmentor(() => {
 
 const button = Button()('hello');
 const unknown = Unknown()('darkness');
+
 Nope()();
+
 Maybe()();
 Never()();
 
@@ -116,7 +115,6 @@ try {
 } catch(ok) {
   console.log('all good');
 }
-
 
 function createButton() {
   return document.createElement('button');

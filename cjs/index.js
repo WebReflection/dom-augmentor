@@ -35,7 +35,7 @@ const observer = (element, handler) => {
     const value = element.valueOf();
     // give a chance to facades to return a reasonable value
     if (value !== element)
-      observer(element, handler);
+      observer(value, handler);
   }
   return element;
 };

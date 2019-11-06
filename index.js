@@ -426,7 +426,7 @@ var augmentor = (function (exports) {
     } else {
       var value = element.valueOf(); // give a chance to facades to return a reasonable value
 
-      if (value !== element) observer(element, handler);
+      if (value !== element) observer(value, handler);
     }
 
     return element;
