@@ -17,9 +17,7 @@ type MutableRefObject <T> = { current: T; };
 
 declare module "dom-augmentor" {
 
-  export default function <T extends (...args: any[]) => any> (input: T): T;
-
-  function createContext <T> (value: T): Context<T>;
+  function augmentor <T extends (...args: any[]) => any> (input: T): T;
 
   function useContext <T> (context: Context<T>): T;
 
