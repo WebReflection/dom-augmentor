@@ -9,7 +9,7 @@
   <script src="https://unpkg.com/lighterhtml@latest"></script>
   <script defer type="module">
 
-  const {default: augmentor, useEffect, useRef, useState} = window.augmentor;
+  const {augmentor, useEffect, useRef, useState} = window.augmentor;
   const {html} = lighterhtml.hook(useRef);
 
 const Button = () => augmentor(text => {

@@ -1,21 +1,14 @@
 'use strict';
+/*! (c) Andrea Giammarchi - ISC */
 const CustomEvent = (m => m.__esModule ? /* istanbul ignore next */ m.default : /* istanbul ignore next */ m)(require('@ungap/custom-event'));
 const WeakSet = (m => m.__esModule ? /* istanbul ignore next */ m.default : /* istanbul ignore next */ m)(require('@ungap/weakset'));
 
-const augmentor = (m => m.__esModule ? /* istanbul ignore next */ m.default : /* istanbul ignore next */ m)(require('augmentor'));
-const {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect: effect,
-  useLayoutEffect,
-  useMemo,
-  useReducer,
-  useRef,
-  useState
-} = require('augmentor');
-
 const disconnected = (m => m.__esModule ? /* istanbul ignore next */ m.default : /* istanbul ignore next */ m)(require('disconnected'));
+
+const {
+  augmentor: $augmentor,
+  dropEffect
+} = require('augmentor');
 
 const find = node => {
   const {childNodes} = node;
@@ -31,58 +24,37 @@ const find = node => {
 
 const observe = disconnected({Event: CustomEvent, WeakSet});
 
-const observer = ($, element) => {
+const observer = (element, handler) => {
   const {nodeType} = element;
   if (nodeType) {
     const node = nodeType === 1 ? element : find(element);
     observe(node);
-    const handler = {handleEvent, onconnected, ondisconnected, $, _: null};
-    node.addEventListener('connected', handler, false);
     node.addEventListener('disconnected', handler, false);
   }
   else {
     const value = element.valueOf();
     // give a chance to facades to return a reasonable value
     if (value !== element)
-      observer($, value);
+      observer(element, handler);
   }
+  return element;
 };
 
-const useEffect = (fn, inputs) => {
-  const args = [fn];
-  if (inputs)
-    // if the inputs is an empty array
-    // observe the returned element for connect/disconnect events
-    // and invoke effects/cleanup on these events only
-    args.push(inputs.length ? inputs : observer);
-  return effect.apply(null, args);
+const augmentor = fn => {
+  const hook = $augmentor(fn);
+  const disconnect = dropEffect.bind(null, hook);
+  return function () {
+    return observer(hook.apply(this, arguments), disconnect);
+  };
 };
+exports.augmentor = augmentor;
 
-Object.defineProperty(exports, '__esModule', {value: true}).default = augmentor;
-
-exports.createContext = createContext;
-exports.useCallback = useCallback;
-exports.useContext = useContext;
-exports.useEffect = useEffect;
-exports.useLayoutEffect = useLayoutEffect;
-exports.useMemo = useMemo;
-exports.useReducer = useReducer;
-exports.useRef = useRef;
-exports.useState = useState;
-
-// handlers methods
-function handleEvent(e) {
-  this['on' + e.type]();
-}
-
-function onconnected() {
-  ondisconnected.call(this);
-  this._ = this.$();
-}
-
-function ondisconnected() {
-  const {_} = this;
-  this._ = null;
-  if (_)
-    _();
-}
+(m => {
+  exports.useState = m.useState;
+  exports.useEffect = m.useEffect;
+  exports.useReducer = m.useReducer;
+  exports.useCallback = m.useCallback;
+  exports.useMemo = m.useMemo;
+  exports.useRef = m.useRef;
+  exports.useLayoutEffect = m.useLayoutEffect;
+})(require('augmentor'));
