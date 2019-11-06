@@ -1,19 +1,13 @@
+/*! (c) Andrea Giammarchi - ISC */
 import CustomEvent from '@ungap/custom-event';
 import WeakSet from '@ungap/weakset';
 
-import augmentor, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect as effect,
-  useLayoutEffect,
-  useMemo,
-  useReducer,
-  useRef,
-  useState
-} from 'augmentor';
-
 import disconnected from 'disconnected';
+
+import {
+  augmentor as $augmentor,
+  dropEffect
+} from 'augmentor';
 
 const find = node => {
   const {childNodes} = node;
@@ -29,60 +23,36 @@ const find = node => {
 
 const observe = disconnected({Event: CustomEvent, WeakSet});
 
-const observer = ($, element) => {
+const observer = (element, handler) => {
   const {nodeType} = element;
   if (nodeType) {
     const node = nodeType === 1 ? element : find(element);
     observe(node);
-    const handler = {handleEvent, onconnected, ondisconnected, $, _: null};
-    node.addEventListener('connected', handler, false);
     node.addEventListener('disconnected', handler, false);
   }
   else {
     const value = element.valueOf();
     // give a chance to facades to return a reasonable value
     if (value !== element)
-      observer($, value);
+      observer(element, handler);
   }
+  return element;
 };
 
-const useEffect = (fn, inputs) => {
-  const args = [fn];
-  if (inputs)
-    // if the inputs is an empty array
-    // observe the returned element for connect/disconnect events
-    // and invoke effects/cleanup on these events only
-    args.push(inputs.length ? inputs : observer);
-  return effect.apply(null, args);
+export const augmentor = fn => {
+  const hook = $augmentor(fn);
+  const disconnect = dropEffect.bind(null, hook);
+  return function () {
+    return observer(hook.apply(this, arguments), disconnect);
+  };
 };
-
-export default augmentor;
 
 export {
-  createContext,
-  useCallback,
-  useContext,
+  useState,
   useEffect,
-  useLayoutEffect,
-  useMemo,
   useReducer,
+  useCallback,
+  useMemo,
   useRef,
-  useState
-};
-
-// handlers methods
-function handleEvent(e) {
-  this['on' + e.type]();
-}
-
-function onconnected() {
-  ondisconnected.call(this);
-  this._ = this.$();
-}
-
-function ondisconnected() {
-  const {_} = this;
-  this._ = null;
-  if (_)
-    _();
-}
+  useLayoutEffect
+} from 'augmentor';
