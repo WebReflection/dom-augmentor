@@ -52,9 +52,11 @@ exports.augmentor = augmentor;
 (m => {
   exports.useState = m.useState;
   exports.useEffect = m.useEffect;
+  exports.useLayoutEffect = m.useLayoutEffect;
+  exports.useContext = m.useContext;
+  exports.createContext = m.createContext;
   exports.useReducer = m.useReducer;
   exports.useCallback = m.useCallback;
   exports.useMemo = m.useMemo;
   exports.useRef = m.useRef;
-  exports.useLayoutEffect = m.useLayoutEffect;
 })(require('augmentor'));

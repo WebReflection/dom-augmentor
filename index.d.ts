@@ -21,6 +21,8 @@ declare module "dom-augmentor" {
 
   function useContext <T> (context: Context<T>): T;
 
+  function createContext <T> (initialValue: T): Context<T>;
+
   function useMemo <T> (callback: () => T, refs: ReadonlyArray<any>): T;
 
   function useCallback <T extends (...args: any[]) => any> (callback: T, refs: RefList): T;

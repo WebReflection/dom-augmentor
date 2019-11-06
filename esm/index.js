@@ -49,10 +49,10 @@ export const augmentor = fn => {
 
 export {
   useState,
-  useEffect,
+  useEffect, useLayoutEffect,
+  useContext, createContext,
   useReducer,
   useCallback,
   useMemo,
-  useRef,
-  useLayoutEffect
+  useRef
 } from 'augmentor';

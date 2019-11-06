@@ -4,7 +4,7 @@
 
 <sup>**Social Media Photo by [stephan sorkin](https://unsplash.com/@sorkin) on [Unsplash](https://unsplash.com/)**</sup>
 
-This is exactly the same as the [augmentor](https://github.com/WebReflection/augmentor) module, except it handles automatically effects per dom nodes.
+This is exactly the same as the [augmentor](https://github.com/WebReflection/augmentor) module, except it handles automatically effects per DOM nodes.
 
 Compatible with any function that returns a DOM node, or a fragment, or a hyperhtml like Wire instance.
 
