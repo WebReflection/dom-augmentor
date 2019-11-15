@@ -48,6 +48,7 @@ export const augmentor = fn => {
 };
 
 export {
+  contextual,
   useState,
   useEffect, useLayoutEffect,
   useContext, createContext,

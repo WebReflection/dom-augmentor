@@ -50,6 +50,7 @@ const augmentor = fn => {
 exports.augmentor = augmentor;
 
 (m => {
+  exports.contextual = m.contextual;
   exports.useState = m.useState;
   exports.useEffect = m.useEffect;
   exports.useLayoutEffect = m.useLayoutEffect;
