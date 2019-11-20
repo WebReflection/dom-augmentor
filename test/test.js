@@ -6,6 +6,16 @@ const {
   useState
 } = require('../cjs');
 
+const NoEffect = () => augmentor(text => {
+  const [i, increment] = useState(0);
+  const {current: button} = useRef(createButton());
+  button.textContent = `${text} ${i}`;
+  button.onclick = () => increment(i + 1);
+  return button;
+});
+
+NoEffect()('nope');
+
 const Button = () => augmentor(text => {
   useEffect(
     () => {
