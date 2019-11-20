@@ -7,6 +7,7 @@ const disconnected = (m => m.__esModule ? /* istanbul ignore next */ m.default :
 
 const {
   augmentor: $augmentor,
+  useEffect: $useEffect,
   dropEffect
 } = require('augmentor');
 
@@ -37,14 +38,20 @@ const observer = (element, handler) => {
     if (value !== element)
       observer(value, handler);
   }
-  return element;
 };
 
+let effect = false;
 const augmentor = fn => {
   const hook = $augmentor(fn);
-  const disconnect = dropEffect.bind(null, hook);
+  let handler = null;
   return function () {
-    return observer(hook.apply(this, arguments), disconnect);
+    effect = false;
+    const node = hook.apply(this, arguments);
+    if (effect) {
+      effect = false;
+      observer(node, handler || (handler = dropEffect.bind(null, hook)));
+    }
+    return node;
   };
 };
 exports.augmentor = augmentor;
@@ -52,7 +59,6 @@ exports.augmentor = augmentor;
 (m => {
   exports.contextual = m.contextual;
   exports.useState = m.useState;
-  exports.useEffect = m.useEffect;
   exports.useLayoutEffect = m.useLayoutEffect;
   exports.useContext = m.useContext;
   exports.createContext = m.createContext;
@@ -61,3 +67,9 @@ exports.augmentor = augmentor;
   exports.useMemo = m.useMemo;
   exports.useRef = m.useRef;
 })(require('augmentor'));
+
+function useEffect() {
+  effect = true;
+  return $useEffect.apply(null, arguments);
+}
+exports.useEffect = useEffect

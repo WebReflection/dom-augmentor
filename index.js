@@ -151,26 +151,16 @@ var augmentor = (function (exports) {
 
   /*! (c) Andrea Giammarchi - ISC */
   var curr = null;
-
-  var invoke = function invoke(fn) {
-    fn();
-  };
-
   var augmentor = function augmentor(fn) {
     var stack = [];
     return function hook() {
       var prev = curr;
       var after = [];
-      var i = 0;
       curr = {
         hook: hook,
         args: arguments,
         stack: stack,
-
-        get index() {
-          return i++;
-        },
-
+        i: 0,
         after: after
       };
 
@@ -178,7 +168,10 @@ var augmentor = (function (exports) {
         return fn.apply(null, arguments);
       } finally {
         curr = prev;
-        after.forEach(invoke);
+
+        for (var i = 0, length = after.length; i < length; i++) {
+          after[i]();
+        }
       }
     };
   };
@@ -247,19 +240,19 @@ var augmentor = (function (exports) {
   };
 
   var useState = function useState(value, options) {
-    var _current = current(),
-        hook = _current.hook,
-        args = _current.args,
-        stack = _current.stack,
-        index = _current.index;
+    var state = current();
+    var i = state.i++;
+    var hook = state.hook,
+        args = state.args,
+        stack = state.stack;
 
-    if (stack.length <= index) {
-      stack[index] = isFunction(value) ? value() : value;
+    if (stack.length <= i) {
+      stack[i] = isFunction(value) ? value() : value;
       if (!updates.has(hook)) updates.set(hook, options && options.sync ? update : reraf());
     }
 
-    return [stack[index], function (value) {
-      stack[index] = isFunction(value) ? value(stack[index]) : value;
+    return [stack[i], function (value) {
+      stack[i] = isFunction(value) ? value(stack[i]) : value;
       updates.get(hook)(hook, null, args);
     }];
   };
@@ -267,7 +260,7 @@ var augmentor = (function (exports) {
   /*! (c) Andrea Giammarchi - ISC */
   var hooks = new WeakMap();
 
-  var invoke$1 = function invoke(_ref) {
+  var invoke = function invoke(_ref) {
     var hook = _ref.hook,
         args = _ref.args;
     hook.apply(null, args);
@@ -298,7 +291,7 @@ var augmentor = (function (exports) {
   function provide(value) {
     if (this.value !== value) {
       this.value = value;
-      hooks.get(this).forEach(invoke$1);
+      hooks.get(this).forEach(invoke);
     }
   }
 
@@ -314,14 +307,14 @@ var augmentor = (function (exports) {
 
   var createEffect = function createEffect(sync) {
     return function (effect, guards) {
-      var _current = current(),
-          hook = _current.hook,
-          stack = _current.stack,
-          index = _current.index,
-          after = _current.after;
+      var state = current();
+      var i = state.i++;
+      var hook = state.hook,
+          stack = state.stack,
+          after = state.after;
 
-      if (index < stack.length) {
-        var info = stack[index];
+      if (i < stack.length) {
+        var info = stack[i];
         var clean = info.clean,
             update = info.update,
             values = info.values;
@@ -352,7 +345,7 @@ var augmentor = (function (exports) {
           update: details.update,
           values: guards
         };
-        stack[index] = _info;
+        stack[i] = _info;
         details.stack.push(_info);
 
         var _invoke = function _invoke() {
@@ -381,15 +374,14 @@ var augmentor = (function (exports) {
 
   /*! (c) Andrea Giammarchi - ISC */
   var useMemo = function useMemo(memo, guards) {
-    var _current = current(),
-        stack = _current.stack,
-        index = _current.index;
-
-    if (!guards || stack.length <= index || guards.some(different, stack[index].values)) stack[index] = {
+    var state = current();
+    var i = state.i++;
+    var stack = state.stack;
+    if (!guards || stack.length <= i || guards.some(different, stack[i].values)) stack[i] = {
       current: memo(),
       values: guards
     };
-    return stack[index].current;
+    return stack[i].current;
   };
   var useCallback = function useCallback(fn, guards) {
     return useMemo(function () {
@@ -409,11 +401,10 @@ var augmentor = (function (exports) {
 
   /*! (c) Andrea Giammarchi - ISC */
   var useRef = function useRef(value) {
-    var _current = current(),
-        stack = _current.stack,
-        index = _current.index;
-
-    return index < stack.length ? stack[index] : stack[index] = {
+    var state = current();
+    var i = state.i++;
+    var stack = state.stack;
+    return i < stack.length ? stack[i] : stack[i] = {
       current: value
     };
   };
@@ -450,24 +441,35 @@ var augmentor = (function (exports) {
 
       if (value !== element) observer(value, handler);
     }
-
-    return element;
   };
 
+  var effect = false;
   var augmentor$1 = function augmentor$1(fn) {
     var hook = augmentor(fn);
-    var disconnect = dropEffect.bind(null, hook);
+    var handler = null;
     return function () {
-      return observer(hook.apply(this, arguments), disconnect);
+      effect = false;
+      var node = hook.apply(this, arguments);
+
+      if (effect) {
+        effect = false;
+        observer(node, handler || (handler = dropEffect.bind(null, hook)));
+      }
+
+      return node;
     };
   };
+  function useEffect$1() {
+    effect = true;
+    return useEffect.apply(null, arguments);
+  }
 
   exports.augmentor = augmentor$1;
   exports.contextual = contextual;
   exports.createContext = createContext;
   exports.useCallback = useCallback;
   exports.useContext = useContext;
-  exports.useEffect = useEffect;
+  exports.useEffect = useEffect$1;
   exports.useLayoutEffect = useLayoutEffect;
   exports.useMemo = useMemo;
   exports.useReducer = useReducer;
