@@ -32,7 +32,7 @@
   "dependencies": {
     "@ungap/custom-event": "^0.2.0",
     "@ungap/weakset": "^0.1.5",
-    "augmentor": "^1.3.1",
+    "augmentor": "^1.4.0",
     "disconnected": "^0.2.1"
   },
   "devDependencies": {
@@ -40,7 +40,7 @@
     "@babel/preset-env": "^7.7.1",
     "ascjs": "^3.1.0",
     "basichtml": "^1.1.2",
-    "coveralls": "^3.0.7",
+    "coveralls": "^3.0.8",
     "drop-babel-typeof": "^1.0.3",
     "http-server": "^0.11.1",
     "istanbul": "^0.4.5",
