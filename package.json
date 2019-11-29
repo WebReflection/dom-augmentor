@@ -32,19 +32,19 @@
   "dependencies": {
     "@ungap/custom-event": "^0.2.0",
     "@ungap/weakset": "^0.1.5",
-    "augmentor": "^1.4.0",
+    "augmentor": "^2.0.0",
     "disconnected": "^0.2.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.2",
-    "@babel/preset-env": "^7.7.1",
-    "ascjs": "^3.1.0",
+    "@babel/core": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "ascjs": "^3.1.2",
     "basichtml": "^1.1.2",
-    "coveralls": "^3.0.8",
+    "coveralls": "^3.0.9",
     "drop-babel-typeof": "^1.0.3",
-    "http-server": "^0.11.1",
+    "http-server": "^0.12.0",
     "istanbul": "^0.4.5",
-    "rollup": "^1.27.3",
+    "rollup": "^1.27.5",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-node-resolve": "^5.2.0",
     "uglify-es": "^3.3.9"
