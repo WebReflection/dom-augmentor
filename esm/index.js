@@ -6,8 +6,7 @@ import disconnected from 'disconnected';
 
 import {
   augmentor as $augmentor,
-  useEffect as $useEffect,
-  dropEffect
+  dropEffect, hasEffect
 } from 'augmentor';
 
 const find = node => {
@@ -39,17 +38,13 @@ const observer = (element, handler) => {
   }
 };
 
-let effect = false;
 export const augmentor = fn => {
-  const hook = $augmentor(fn);
   let handler = null;
+  const hook = $augmentor(fn);
   return function () {
-    effect = false;
     const node = hook.apply(this, arguments);
-    if (effect) {
-      effect = false;
+    if (hasEffect(hook))
       observer(node, handler || (handler = dropEffect.bind(null, hook)));
-    }
     return node;
   };
 };
@@ -57,15 +52,10 @@ export const augmentor = fn => {
 export {
   contextual,
   useState,
-  useLayoutEffect,
+  useEffect, useLayoutEffect,
   useContext, createContext,
   useReducer,
   useCallback,
   useMemo,
   useRef
 } from 'augmentor';
-
-export function useEffect() {
-  effect = true;
-  return $useEffect.apply(null, arguments);
-}

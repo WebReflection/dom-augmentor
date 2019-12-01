@@ -7,8 +7,8 @@ const disconnected = (m => m.__esModule ? /* istanbul ignore next */ m.default :
 
 const {
   augmentor: $augmentor,
-  useEffect: $useEffect,
-  dropEffect
+  dropEffect,
+  hasEffect
 } = require('augmentor');
 
 const find = node => {
@@ -40,17 +40,13 @@ const observer = (element, handler) => {
   }
 };
 
-let effect = false;
 const augmentor = fn => {
-  const hook = $augmentor(fn);
   let handler = null;
+  const hook = $augmentor(fn);
   return function () {
-    effect = false;
     const node = hook.apply(this, arguments);
-    if (effect) {
-      effect = false;
+    if (hasEffect(hook))
       observer(node, handler || (handler = dropEffect.bind(null, hook)));
-    }
     return node;
   };
 };
@@ -59,6 +55,7 @@ exports.augmentor = augmentor;
 (m => {
   exports.contextual = m.contextual;
   exports.useState = m.useState;
+  exports.useEffect = m.useEffect;
   exports.useLayoutEffect = m.useLayoutEffect;
   exports.useContext = m.useContext;
   exports.createContext = m.createContext;
@@ -67,9 +64,3 @@ exports.augmentor = augmentor;
   exports.useMemo = m.useMemo;
   exports.useRef = m.useRef;
 })(require('augmentor'));
-
-function useEffect() {
-  effect = true;
-  return $useEffect.apply(null, arguments);
-}
-exports.useEffect = useEffect
