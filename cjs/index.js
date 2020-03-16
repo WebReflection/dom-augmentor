@@ -12,14 +12,11 @@ const {
 } = require('augmentor');
 
 const find = node => {
-  const {childNodes} = node;
-  const {length} = childNodes;
-  let i = 0;
-  while (i < length) {
-    const child = childNodes[i++];
-    if (child.nodeType === 1)
-      return child;
-  }
+  let {firstChild} = node;
+  while (firstChild && firstChild.nodeType !== 1)
+    firstChild = firstChild.nextSibling;
+  if (firstChild)
+    return firstChild;
   throw 'unobservable';
 };
 

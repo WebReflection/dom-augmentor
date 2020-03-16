@@ -449,15 +449,13 @@ var augmentor = (function (exports) {
   /*! (c) Andrea Giammarchi - ISC */
 
   var find = function find(node) {
-    var childNodes = node.childNodes;
-    var length = childNodes.length;
-    var i = 0;
+    var firstChild = node.firstChild;
 
-    while (i < length) {
-      var child = childNodes[i++];
-      if (child.nodeType === 1) return child;
+    while (firstChild && firstChild.nodeType !== 1) {
+      firstChild = firstChild.nextSibling;
     }
 
+    if (firstChild) return firstChild;
     throw 'unobservable';
   };
 
