@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@ungap/custom-event": "^0.2.0",
-    "@ungap/weakset": "^0.1.5",
+    "@ungap/weakset": "^0.2.0",
     "augmentor": "^2.2.0",
     "disconnected": "^0.2.1"
   },
